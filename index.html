@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://example.com/bg.jpg');
+            background-size: cover;
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .nama-tamu {
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Undangan Pernikahan</h1>
+        <p>Kepada Yth:</p>
+        <div class="nama-tamu" id="nama-tamu">[Nama Tamu]</div>
+        <p>Kami mengundang Bapak/Ibu untuk hadir dalam acara pernikahan kami:</p>
+        <div class="details">
+            <p>📅 Sabtu, 28 Oktober 2025</p>
+            <p>🕒 10.00 WIB - Selesai</p>
+            <p>📍 Gedung Serbaguna, Jakarta</p>
+        </div>
+        <button onclick="konfirmasiKehadiran()">Konfirmasi Kehadiran</button>
+    </div>
+
+    <script>
+        // Mengambil parameter nama dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const namaTamu = urlParams.get('nama') || 'Tamu Undangan';
+
+        // Update nama tamu
+        document.getElementById('nama-tamu').innerText = namaTamu;
+
+        function konfirmasiKehadiran() {
+            const nomorWhatsapp = "6281392093228";
+            const pesan = `Baiklah, insyaAllah saya ${namaTamu} akan hadir pada acara pernikahan anda.`;
+            window.open(`https://wa.me/${nomorWhatsapp}?text=${encodeURIComponent(pesan)}`, '_blank');
+        }
+
+        // Optional: Mencegah klik kanan
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
