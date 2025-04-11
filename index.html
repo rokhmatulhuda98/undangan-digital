@@ -91,6 +91,15 @@
         } else {
             window.location.href = 'error.html';
         }
+
+        async function konfirmasiKehadiran() {
+          const docRef = db.collection("undangan").where("token", "==", token);
+          await docRef.update({ hadir: true });
+          
+          const nomorWhatsapp = "6281392093228"; // Ganti dengan nomor Anda
+          const pesan = `Halo, saya ${document.getElementById('nama-tamu').innerText} akan hadir!`;
+          window.open(`https://wa.me/${nomorWhatsapp}?text=${encodeURIComponent(pesan)}`, '_blank');
+        }
     </script>
 </body>
 </html>
