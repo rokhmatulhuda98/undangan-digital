@@ -66,6 +66,9 @@
         // Kode validasi token dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
+        const pengantin = urlParams.get('pengantin');
+
+        document.getElementById('nama-pengantin').innerText = pengantin;
 
         if(token) {
             db.collection("undangan").where("token", "==", token)
@@ -76,7 +79,6 @@
                     } else {
                         const data = querySnapshot.docs[0].data();
                         document.getElementById('nama-tamu').innerText = data.nama;
-                        document.getElementById('nama-pengantin').innerText = data.pengantin;
                         
                         // Update status dibuka
                         db.collection("undangan").doc(querySnapshot.docs[0].id)
