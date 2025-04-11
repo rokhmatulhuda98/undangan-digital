@@ -36,6 +36,7 @@
         <p>Kepada Yth:</p>
         <div class="nama-tamu" id="nama-tamu">[Nama Tamu]</div>
         <p>Kami mengundang Bapak/Ibu untuk hadir dalam acara pernikahan kami:</p>
+        <div class="nama-pengantin" id="nama-pengantin">[Nama Pengantin]</div>
         <div class="details">
             <p>📅 Sabtu, 28 Oktober 2025</p>
             <p>🕒 10.00 WIB - Selesai</p>
@@ -44,24 +45,50 @@
         <button onclick="konfirmasiKehadiran()">Konfirmasi Kehadiran</button>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
     <script>
-        // Mengambil parameter nama dari URL
+        const firebaseConfig = {
+        apiKey: "AIzaSyCzngZj-wOz-oLJxwyyrsEnqhbY9rEUggk",
+        authDomain: "undangan-pernikahan-3a5c8.firebaseapp.com",
+        projectId: "undangan-pernikahan-3a5c8",
+        storageBucket: "undangan-pernikahan-3a5c8.firebasestorage.app",
+        messagingSenderId: "15611415285",
+        appId: "1:15611415285:web:b65d9cc188aae2f0ee13bc",
+        measurementId: "G-XY1P4P6CV2"
+        };
+        
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Kode validasi token dari URL
         const urlParams = new URLSearchParams(window.location.search);
-        const namaTamu = urlParams.get('nama') || 'Tamu Undangan';
+        const token = urlParams.get('token');
 
-        // Update nama tamu
-        document.getElementById('nama-tamu').innerText = namaTamu;
-
-        function konfirmasiKehadiran() {
-            const nomorWhatsapp = "6281392093228";
-            const pesan = `Baiklah, insyaAllah saya ${namaTamu} akan hadir pada acara pernikahan anda.`;
-            window.open(`https://wa.me/${nomorWhatsapp}?text=${encodeURIComponent(pesan)}`, '_blank');
+        if(token) {
+            db.collection("undangan").where("token", "==", token)
+                .get()
+                .then((querySnapshot) => {
+                    if(querySnapshot.empty) {
+                        window.location.href = 'error.html';
+                    } else {
+                        const data = querySnapshot.docs[0].data();
+                        document.getElementById('nama-tamu').innerText = data.nama;
+                        document.getElementById('nama-pengantin').innerText = data.pengantin;
+                        
+                        // Update status dibuka
+                        db.collection("undangan").doc(querySnapshot.docs[0].id)
+                            .update({ 
+                                dibuka: true, 
+                                last_opened: firebase.firestore.FieldValue.serverTimestamp() 
+                            });
+                        }
+                });
+        } else {
+            window.location.href = 'error.html';
         }
-
-        // Optional: Mencegah klik kanan
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
     </script>
 </body>
 </html>
