@@ -28,6 +28,25 @@
             font-size: 1.5em;
             margin: 20px 0;
         }
+
+        .music-player {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: rgba(255,255,255,0.8);
+        padding: 10px;
+        border-radius: 50px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .music-control {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -44,6 +63,9 @@
         </div>
         <button onclick="konfirmasiKehadiran()">Konfirmasi Kehadiran</button>
     </div>
+    <div class="music-player">
+        <button class="music-control" id="musicBtn" onclick="toggleMusic()">▶️</button>
+      </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -66,9 +88,6 @@
         // Kode validasi token dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
-        const pengantin = urlParams.get('pengantin');
-
-        document.getElementById('nama-pengantin').innerText = pengantin;
 
         if(token) {
             db.collection("undangan").where("token", "==", token)
@@ -79,6 +98,7 @@
                     } else {
                         const data = querySnapshot.docs[0].data();
                         document.getElementById('nama-tamu').innerText = data.nama;
+                        document.getElementById('nama-pengantin').innerText = data.pengantin;
                         
                         // Update status dibuka
                         db.collection("undangan").doc(querySnapshot.docs[0].id)
@@ -93,13 +113,49 @@
         }
 
         async function konfirmasiKehadiran() {
-          const docRef = db.collection("undangan").where("token", "==", token);
-          await docRef.update({ hadir: true });
-          
-          const nomorWhatsapp = "6281392093228"; // Ganti dengan nomor Anda
-          const pesan = `Halo, saya ${document.getElementById('nama-tamu').innerText} akan hadir!`;
-          window.open(`https://wa.me/${nomorWhatsapp}?text=${encodeURIComponent(pesan)}`, '_blank');
+        const docRef = db.collection("undangan").where("token", "==", token);
+        await docRef.update({ hadir: true });
+        
+        const nomorWhatsapp = "6281392093228"; // Ganti dengan nomor Anda
+        const pesan = `Halo, saya ${document.getElementById('nama-tamu').innerText} akan hadir!`;
+        window.open(`https://wa.me/${nomorWhatsapp}?text=${encodeURIComponent(pesan)}`, '_blank');
         }
+        
+        // Musik Background
+        const bgMusic = document.getElementById('bgMusic');
+        let isMusicPlaying = false;
+
+        // Fungsi toggle musik
+        function toggleMusic() {
+        if(isMusicPlaying) {
+            bgMusic.pause();
+        } else {
+            bgMusic.play().catch(() => {
+            // Handle autoplay restrictions
+            alert('Silakan klik di mana saja untuk memulai musik');
+            });
+        }
+        isMusicPlaying = !isMusicPlaying;
+        updateMusicButton();
+        }
+
+        // Update tampilan tombol
+        function updateMusicButton() {
+        const btn = document.getElementById('musicBtn');
+        btn.innerHTML = isMusicPlaying ? '⏸️' : '▶️';
+        }
+
+        // Enable autoplay setelah interaksi pengguna
+        document.body.addEventListener('click', () => {
+        if(!isMusicPlaying) {
+            bgMusic.play();
+            isMusicPlaying = true;
+            updateMusicButton();
+        }
+        }, { once: true });
     </script>
+    <audio id="bgMusic" loop>
+        <source src="https://drive.google.com/uc?export=download&id=1_nol9MY8rHsjcrcgGOId03xlij8pwI6h" type="audio/mpeg">
+      </audio>
 </body>
 </html>
