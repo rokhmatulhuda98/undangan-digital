@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan</title>
     <style>
-        /* Tambahkan CSS untuk styling */
         .music-player {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            top: 20px;
+            left: 20px;
             z-index: 1000;
         }
         .music-control {
             font-size: 24px;
-            padding: 10px;
-            border-radius: 50%;
+            padding: 10px 15px;
+            border-radius: 25px;
             background: #ffffff;
             border: 2px solid #333;
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -36,14 +36,14 @@
     </audio>
 
     <div class="music-player">
-        <button class="music-control" id="musicBtn">▶️</button>
+        <button class="music-control" id="musicBtn">⏸️</button>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const bgMusic = document.getElementById('bgMusic');
             const musicBtn = document.getElementById('musicBtn');
-            let isMusicPlaying = false;
+            let isMusicPlaying = true;
 
             // Handle error jika elemen tidak ditemukan
             if(!bgMusic || !musicBtn) {
@@ -51,16 +51,13 @@
                 if(musicBtn) musicBtn.style.display = 'none';
                 return;
             }
-
+            
             // Fungsi toggle musik
             const toggleMusic = () => {
                 if(isMusicPlaying) {
                     bgMusic.pause();
                 } else {
-                    bgMusic.play()
-                        .catch(error => {
-                            alert('Silakan klik di area mana pun untuk mengizinkan musik');
-                        });
+                    bgMusic.play().catch(handleAudioError);
                 }
                 isMusicPlaying = !isMusicPlaying;
                 updateMusicButton();
@@ -68,25 +65,48 @@
 
             // Update tampilan tombol
             const updateMusicButton = () => {
-                musicBtn.innerHTML = isMusicPlaying ? '⏸️' : '▶️';
+                musicBtn.textContent = isMusicPlaying ? '⏸️' : '▶️';
             }
 
+            // Handle error audio
+            const handleAudioError = (error) => {
+                console.error('Error audio:', error);
+                musicBtn.style.backgroundColor = '#ffcccc';
+                musicBtn.textContent = '⚠️ Error';
+            }
+            
             // Event listener untuk tombol
             musicBtn.addEventListener('click', toggleMusic);
 
-            // Enable musik setelah interaksi pertama
-            document.body.addEventListener('click', () => {
-                if(!isMusicPlaying) {
-                    bgMusic.play()
-                        .then(() => {
-                            isMusicPlaying = true;
-                            updateMusicButton();
-                        })
-                        .catch(error => {
-                            musicBtn.style.display = 'none';
-                        });
-                }
-            }, { once: true });
+            // Coba autoplay dengan handling khusus
+            const tryAutoplay = () => {
+                bgMusic.play()
+                    .then(() => {
+                        isMusicPlaying = true;
+                        updateMusicButton();
+                    })
+                    .catch(error => {
+                        isMusicPlaying = false;
+                        updateMusicButton();
+                        document.body.addEventListener('click', () => {
+                            bgMusic.play().then(() => {
+                                isMusicPlaying = true;
+                                updateMusicButton();
+                            });
+                        }, { once: true });
+                    });
+            }
+
+            // Inisialisasi
+            if(bgMusic && musicBtn) {
+                tryAutoplay();
+            } else {
+                console.error('Elemen tidak ditemukan');
+                if(musicBtn) musicBtn.style.display = 'none';
+            }
+
+            // Handle error audio
+            bgMusic.addEventListener('error', handleAudioError);
         });
     </script>
 </body>
