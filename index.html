@@ -121,41 +121,61 @@
         window.open(`https://wa.me/${nomorWhatsapp}?text=${encodeURIComponent(pesan)}`, '_blank');
         }
         
-        // Musik Background
-        const bgMusic = document.getElementById('bgMusic');
-        let isMusicPlaying = false;
-
-        // Fungsi toggle musik
-        function toggleMusic() {
-        if(isMusicPlaying) {
-            bgMusic.pause();
-        } else {
-            bgMusic.play().catch(() => {
-            // Handle autoplay restrictions
-            alert('Silakan klik di mana saja untuk memulai musik');
-            });
-        }
-        isMusicPlaying = !isMusicPlaying;
-        updateMusicButton();
-        }
-
-        // Update tampilan tombol
-        function updateMusicButton() {
-        const btn = document.getElementById('musicBtn');
-        btn.innerHTML = isMusicPlaying ? '⏸️' : '▶️';
-        }
-
-        // Enable autoplay setelah interaksi pengguna
-        document.body.addEventListener('click', () => {
-        if(!isMusicPlaying) {
-            bgMusic.play();
-            isMusicPlaying = true;
+        // Pindahkan inisialisasi ke dalam event listener DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', () => {
+          const bgMusic = document.getElementById('bgMusic');
+          let isMusicPlaying = false;
+        
+          // Fungsi toggle musik dengan null check
+          window.toggleMusic = () => {
+            if(!bgMusic) {
+              console.error('Elemen audio tidak ditemukan');
+              return;
+            }
+        
+            if(isMusicPlaying) {
+              bgMusic.pause();
+            } else {
+              // Handle autoplay policy
+              const playPromise = bgMusic.play();
+              
+              if(playPromise !== undefined) {
+                playPromise.catch(error => {
+                  alert('Silakan klik tombol play untuk memulai musik');
+                });
+              }
+            }
+            isMusicPlaying = !isMusicPlaying;
             updateMusicButton();
+          }
+        
+          // Fungsi update tombol
+          function updateMusicButton() {
+            const btn = document.getElementById('musicBtn');
+            if(btn) {
+              btn.innerHTML = isMusicPlaying ? '⏸️' : '▶️';
+            }
+          }
+        
+          // Enable musik setelah interaksi pertama
+          document.body.addEventListener('click', () => {
+            if(!isMusicPlaying && bgMusic) {
+              bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                updateMusicButton();
+              });
+            }
+          }, { once: true });
+        });
+                
+        // Di akhir file script
+        if(!document.getElementById('bgMusic')) {
+          console.error('Elemen audio tidak ditemukan - pastikan ID benar');
+          document.getElementById('musicBtn').style.display = 'none';
         }
-        }, { once: true });
     </script>
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop style="display: none;">
         <source src="https://drive.google.com/uc?export=download&id=1_nol9MY8rHsjcrcgGOId03xlij8pwI6h" type="audio/mpeg">
-      </audio>
+    </audio>
 </body>
 </html>
