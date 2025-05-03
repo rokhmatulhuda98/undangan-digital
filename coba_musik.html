@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan</title>
+    <style>
+        /* Tambahkan CSS untuk styling */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .music-control {
+            font-size: 24px;
+            padding: 10px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #333;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Percobaan Music</h1>
+    </div>
+    
+    <!-- Pindahkan audio element ke atas -->
+    <audio id="bgMusic" loop>
+        <source src="https://drive.google.com/uc?export=download&id=1_nol9MY8rHsjcrcgGOId03xlij8pwI6h" type="audio/mpeg">
+    </audio>
+
+    <div class="music-player">
+        <button class="music-control" id="musicBtn">▶️</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const bgMusic = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicBtn');
+            let isMusicPlaying = false;
+
+            // Handle error jika elemen tidak ditemukan
+            if(!bgMusic || !musicBtn) {
+                console.error('Elemen tidak ditemukan');
+                if(musicBtn) musicBtn.style.display = 'none';
+                return;
+            }
+
+            // Fungsi toggle musik
+            const toggleMusic = () => {
+                if(isMusicPlaying) {
+                    bgMusic.pause();
+                } else {
+                    bgMusic.play()
+                        .catch(error => {
+                            alert('Silakan klik di area mana pun untuk mengizinkan musik');
+                        });
+                }
+                isMusicPlaying = !isMusicPlaying;
+                updateMusicButton();
+            }
+
+            // Update tampilan tombol
+            const updateMusicButton = () => {
+                musicBtn.innerHTML = isMusicPlaying ? '⏸️' : '▶️';
+            }
+
+            // Event listener untuk tombol
+            musicBtn.addEventListener('click', toggleMusic);
+
+            // Enable musik setelah interaksi pertama
+            document.body.addEventListener('click', () => {
+                if(!isMusicPlaying) {
+                    bgMusic.play()
+                        .then(() => {
+                            isMusicPlaying = true;
+                            updateMusicButton();
+                        })
+                        .catch(error => {
+                            musicBtn.style.display = 'none';
+                        });
+                }
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>
