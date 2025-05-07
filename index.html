@@ -33,7 +33,7 @@
 				window.settingAutoplay = settingAutoplay === 'disable' ? false : true;
 			</script>
 			<div id="audio-container" class="audio-box">
-				<audio id="song" loop autoplay>
+				<audio id="song" loop autoplay muted>
 					<source src="ytmp3free.cc_maher-zain-harris-j-qalbi-fil-madinah-official-music-video-youtubemp3free.org.mp3" type="audio/mpeg">    
 				</audio>		
 			</div>
@@ -41,6 +41,16 @@
 				<button class="music-control" id="musicBtn">⏸️</button>
 			</div>
 			<script>
+				// Cek apakah autoplay di-enable
+				if (window.settingAutoplay) {
+				  // Unmute audio setelah ada interaksi pengguna (misalnya: klik/tap)
+				  document.addEventListener('click', function() {
+				    const audio = document.getElementById('song');
+				    audio.muted = false;
+				  });
+				}
+
+				
 				document.addEventListener('DOMContentLoaded', () => {
 			            const bgMusic = document.getElementById('bgMusic');
 			            const musicBtn = document.getElementById('musicBtn');
