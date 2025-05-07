@@ -5,36 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan</title>
     <style>
-        .music-player {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-        }
-        .music-control {
-            font-size: 24px;
-            padding: 10px 15px;
-            border-radius: 25px;
-            background: #ffffff;
-            border: 2px solid #333;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
+	#couple-section {
+	  display: none; /* Sembunyikan elemen secara default */
+	}
     </style>
 </head>
 <body>
 	<div class="header">
         	<h1>Percobaan Music</h1>
     	</div>
+	<div id="undangan_dibuka-section" style="display: none;">
+	  <span>bagian tertutup dibuka</span>
+	</div>
 	<div class="elementor-element elementor-element-4a4feeae elementor-view-stacked wdp-sticky-section-positon--top rotate_03 elementor-widget__width-initial elementor-shape-circle elementor-widget elementor-widget-weddingpress-audio" data-id="4a4feeae" data-element_type="widget" data-settings="{&quot;loop&quot;:&quot;yes&quot;}" data-widget_type="weddingpress-audio.default">
 		<div class="elementor-widget-container">
 			<div id="audio-container" class="audio-box">
-				<audio id="song" loop>
+				<audio id="background-music" loop>
 					<source src="ytmp3free.cc_maher-zain-harris-j-qalbi-fil-madinah-official-music-video-youtubemp3free.org.mp3" type="audio/mpeg">    
 				</audio>		
 			</div>
-			<button class="music-player" onclick="document.getElementById('song').play()">Putar Musik</button>
+			<a href="#undangan_dibuka" class="custom-link">Buka Undangan</a>
 		</div>
         </div>
+
+	<script>
+		// Deteksi perubahan hash di URL
+		window.addEventListener('hashchange', function() {
+		  const hash = window.location.hash;
+		  
+		  if (hash === '#undangan_dibuka') {
+		    // Tampilkan bagian yang tersembunyi
+		    document.getElementById('undangan_dibuka-section').style.display = 'block';
+		    
+		    // Putar musik
+		    const audio = document.getElementById('background-music');
+		    audio.play().catch(error => {
+		      console.log("Browser memblokir autoplay. Butuh interaksi pengguna.");
+		    });
+		  }
+		});
+		
+		// Tangani klik tombol untuk navigasi hash
+		document.querySelector('.custom-link').addEventListener('click', function(e) {
+		  e.preventDefault(); // Hentikan navigasi default
+		  window.location.hash = 'undangan_dibuka'; // Tambahkan hash ke URL
+		});
+	</script>
 </body>
 </html>
