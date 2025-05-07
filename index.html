@@ -25,6 +25,7 @@
 	  cursor: pointer;
 	  position: relative;
 	  overflow: hidden;
+	  padding-left: 45px; /* Sesuaikan untuk ruang gambar */
 	}
 	
 	/* Efek hover */
@@ -43,10 +44,18 @@
 	
 	/* Ikon musik */
 	.custom-link::before {
-	  content: '✉️';
-	  margin-right: 10px;
-	  font-size: 18px;
-	  vertical-align: middle;
+	  content: '';
+	  display: inline-block;
+	  width: 20px; /* Ukuran gambar */
+	  height: 20px;
+	  background-image: url('ikon_buku.png');
+	  background-size: contain;
+	  background-repeat: no-repeat;
+	  position: absolute;
+	  left: 15px; /* Jarak dari kiri */
+	  top: 50%;
+	  transform: translateY(-50%);
+	  margin-right: 0;
 	}
 	
 	/* Animasi gelombang suara */
