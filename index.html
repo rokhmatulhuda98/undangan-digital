@@ -33,87 +33,18 @@
 					<source src="ytmp3free.cc_maher-zain-harris-j-qalbi-fil-madinah-official-music-video-youtubemp3free.org.mp3" type="audio/mpeg">    
 				</audio>		
 			</div>
-			<div class="music-player">
-				<button class="music-control" id="musicBtn">⏸️</button>
-			</div>
+			
 			<script>
-				var settingAutoplay = 'yes';
-				window.settingAutoplay = settingAutoplay === 'disable' ? false : true;
-				
-				// Cek apakah autoplay di-enable
-				if (window.settingAutoplay) {
-				  // Unmute audio setelah ada interaksi pengguna (misalnya: klik/tap)
-				  document.addEventListener('click', function() {
-				    const audio = document.getElementById('song');
+				document.addEventListener('DOMContentLoaded', function() {
+				  const audio = document.getElementById('song');
+				  audio.muted = true; // Mulai dengan muted
+				  audio.play().then(() => {
+				    // Unmute setelah audio mulai diputar (tidak selalu berhasil)
 				    audio.muted = false;
+				  }).catch(error => {
+				    console.log("Autoplay diblok browser");
 				  });
-				}
-
-				
-				document.addEventListener('DOMContentLoaded', () => {
-			            const bgMusic = document.getElementById('bgMusic');
-			            const musicBtn = document.getElementById('musicBtn');
-			            let isMusicPlaying = true;
-			
-			            // Handle error jika elemen tidak ditemukan
-			            if(!bgMusic || !musicBtn) {
-			                console.error('Elemen tidak ditemukan');
-			                if(musicBtn) musicBtn.style.display = 'none';
-			                return;
-			            }
-			            
-			            // Fungsi toggle musik
-			            const toggleMusic = () => {
-			                if(isMusicPlaying) {
-			                    bgMusic.pause();
-			                } else {
-			                    bgMusic.play().catch(handleAudioError);
-			                }
-			                isMusicPlaying = !isMusicPlaying;
-			                updateMusicButton();
-			            }
-			
-			            // Update tampilan tombol
-			            const updateMusicButton = () => {
-			                musicBtn.textContent = isMusicPlaying ? '⏸️' : '▶️';
-			            }
-			
-			            // Handle error audio
-			            const handleAudioError = (error) => {
-			                console.error('Error audio:', error);
-			                musicBtn.style.backgroundColor = '#ffcccc';
-			                musicBtn.textContent = '⚠️ Error';
-			            }
-			            
-			            // Event listener untuk tombol
-			            musicBtn.addEventListener('click', toggleMusic);
-							
-			            // Coba autoplay dengan handling khusus
-			            const tryAutoplay = () => {
-			                bgMusic.play()
-			                    .then(() => {
-			                        isMusicPlaying = true;
-			                        updateMusicButton();
-			                    })
-			                    .catch(error => {
-			                        isMusicPlaying = false;
-			                        updateMusicButton();
-			                        document.body.addEventListener('click', () => {
-			                            bgMusic.play().then(() => {
-			                                isMusicPlaying = true;
-			                                updateMusicButton();
-			                            });
-			                        }, { once: true });
-			                    });
-			            }
-			
-			            // Inisialisasi
-			            if(bgMusic && musicBtn) {
-			                tryAutoplay();
-			            } else {
-			                console.error('Elemen tidak ditemukan');
-			                if(musicBtn) musicBtn.style.display = 'none';
-			            }
+				});
 			</script>
 		</div>
         </div>
