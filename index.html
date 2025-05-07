@@ -28,10 +28,6 @@
     	</div>
 	<div class="elementor-element elementor-element-4a4feeae elementor-view-stacked wdp-sticky-section-positon--top rotate_03 elementor-widget__width-initial elementor-shape-circle elementor-widget elementor-widget-weddingpress-audio" data-id="4a4feeae" data-element_type="widget" data-settings="{&quot;loop&quot;:&quot;yes&quot;}" data-widget_type="weddingpress-audio.default">
 		<div class="elementor-widget-container">
-			<script>
-				var settingAutoplay = 'yes';
-				window.settingAutoplay = settingAutoplay === 'disable' ? false : true;
-			</script>
 			<div id="audio-container" class="audio-box">
 				<audio id="song" loop autoplay muted>
 					<source src="ytmp3free.cc_maher-zain-harris-j-qalbi-fil-madinah-official-music-video-youtubemp3free.org.mp3" type="audio/mpeg">    
@@ -41,6 +37,9 @@
 				<button class="music-control" id="musicBtn">⏸️</button>
 			</div>
 			<script>
+				var settingAutoplay = 'yes';
+				window.settingAutoplay = settingAutoplay === 'disable' ? false : true;
+				
 				// Cek apakah autoplay di-enable
 				if (window.settingAutoplay) {
 				  // Unmute audio setelah ada interaksi pengguna (misalnya: klik/tap)
