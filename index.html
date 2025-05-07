@@ -33,20 +33,19 @@
 					<source src="ytmp3free.cc_maher-zain-harris-j-qalbi-fil-madinah-official-music-video-youtubemp3free.org.mp3" type="audio/mpeg">    
 				</audio>		
 			</div>
-			
-			<script>
-				document.addEventListener('DOMContentLoaded', function() {
-				  const audio = document.getElementById('song');
-				  audio.muted = true; // Mulai dengan muted
-				  audio.play().then(() => {
-				    // Unmute setelah audio mulai diputar (tidak selalu berhasil)
-				    audio.muted = false;
-				  }).catch(error => {
-				    console.log("Autoplay diblok browser");
-				  });
-				});
-			</script>
 		</div>
         </div>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+	  const audio = document.getElementById('song');
+	  audio.muted = true; // Mulai dengan muted
+	  audio.play().then(() => {
+	    // Unmute setelah audio mulai diputar (tidak selalu berhasil)
+	    audio.muted = false;
+	  }).catch(error => {
+	    console.log("Autoplay diblok browser");
+	  });
+	});
+</script>
 </body>
 </html>
