@@ -1,1 +1,89 @@
+    <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan</title>
+    <style>
+	#undangan_dibuka-section {
+	  display: none; /* Sembunyikan elemen secara default */
+	}
+	/* Gaya dasar tombol */
+	.custom-link {
+	  display: inline-block;
+	  padding: 12px 25px;
+	  background-color: #FFEE93; /* Kuning pastel */
+	  color: #5C4A00 !important;
+	  text-decoration: none !important;
+	  border-radius: 25px; /* Sudut melengkung */
+	  font-family: 'Arial', sans-serif;
+	  font-size: 16px;
+	  font-weight: bold;
+	  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	  border: 2px solid #E6D585;
+	  cursor: pointer;
+	  position: fixed;
+	  left: 50%;
+	  top: 50%;
+	  transform: translate(-50%, -50%);
+	  transition: all 0.5s ease;
+	  z-index: 1000;
+	  overflow: hidden;
+	  padding-left: 45px; /* Sesuaikan untuk ruang gambar */
+	}
+	
+	/* Untuk tampilan mobile */
+	@media (max-width: 480px) {
+	  .custom-link {
+	    padding: 10px 20px;
+	    font-size: 14px;
+	  }
+	}
+    </style>
+</head>
+<body>
+	<div class="header">
+        	<h1>Percobaan Music</h1>
+    	</div>
+	<div class="elementor-element elementor-element-4a4feeae elementor-view-stacked wdp-sticky-section-positon--top rotate_03 elementor-widget__width-initial elementor-shape-circle elementor-widget elementor-widget-weddingpress-audio" data-id="4a4feeae" data-element_type="widget" data-settings="{&quot;loop&quot;:&quot;yes&quot;}" data-widget_type="weddingpress-audio.default">
+		<div class="elementor-widget-container">
+			<div id="audio-container" class="audio-box">
+				<audio id="background-music" loop>
+					<source src="ytmp3free.cc_maher-zain-harris-j-qalbi-fil-madinah-official-music-video-youtubemp3free.org.mp3" type="audio/mpeg">    
+				</audio>		
+			</div>
+			<a href="#undangan_dibuka" class="custom-link">Buka Undangan</a>
+		</div>
+        </div>
+
+	<div id="undangan_dibuka-section" style="display: none;">
+	  <span>bagian tertutup dibuka, di sini bisa diisi macem macem sesuai dengan kemauan orang yang mau membuat isi undangannya. Di dalamnya bisa ada alamat dengan google map, jam hari h, komentar yang berisi ucapan selamat, dll.
+	  </span>
+	</div>
+
+	<script>
+		// Deteksi perubahan hash di URL
+		window.addEventListener('hashchange', function() {
+		  const hash = window.location.hash;
+		  
+		  if (hash === '#undangan_dibuka') {
+		    // Tampilkan bagian yang tersembunyi
+		    document.getElementById('undangan_dibuka-section').style.display = 'block';
+		    
+		    // Putar musik
+		    const audio = document.getElementById('background-music');
+		    audio.play().catch(error => {
+		      console.log("Browser memblokir autoplay. Butuh interaksi pengguna.");
+		    });
+		  }
+		});
+		
+		// Tangani klik tombol untuk navigasi hash
+		document.querySelector('.custom-link').addEventListener('click', function(e) {
+		  e.preventDefault(); // Hentikan navigasi default
+		  window.location.hash = 'undangan_dibuka'; // Tambahkan hash ke URL
+		});
+	</script>
+</body>
+</html>
 
